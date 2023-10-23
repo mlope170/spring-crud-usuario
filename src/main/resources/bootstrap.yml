@@ -1,0 +1,49 @@
+spring:
+  datasource: #Datasource Oracle
+    url: jdbc:oracle:thin:@exa02db04-vip.gobex.pri:1521/decorp5
+    username: agr_gesfor
+    password: gesfordesowner
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.Oracle8iDialect
+#      format: true
+server:
+  port: 9010
+  forward-headers-strategy: native
+  ssl: #Configuracion HTTPS
+    enabled: true
+    key-store: classpath:AutoFirmV3Store.p12
+    key-store-password: geforex
+    key-store-type: PKCS12
+    key-alias: autofirmadov3
+
+#app:
+#  security:
+#    jwt:
+#      secret: askljdhfgenerarclaveconalgunaherramientacomokeypassasdasdggf
+#      expiration: 86400
+
+      #eureka:
+      #  client:
+      #    serviceUrl:
+      #      defaultZone: http://${app.eureka-server-host}:${app.eureka-server-port}/eureka/
+      #    initialInstanceInfoReplicationIntervalSeconds: 5
+      #    registryFetchIntervalSeconds: 5
+      #  instance:
+      #    leaseRenewalIntervalInSeconds: 5
+      #    leaseExpirationInSeconds: 5
+      #se conecta al config-server y se descarga la configuracion
+      #spring:
+      #  cloud:
+      #    config:
+      #      fail-fast: true
+      #      retry:
+      #        initial-interval: 3000
+      #        multiplier: 1.3
+      #        max-interval: 10000
+      #        max-attempts: 20
+      #      uri: http://localhost:8888 #se conecta al servidor configurado  (localhost) y se descarga la configuracion
+      #  application:
+      #    name: crud-products
