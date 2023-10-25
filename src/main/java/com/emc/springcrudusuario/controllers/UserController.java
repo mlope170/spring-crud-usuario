@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,8 +30,10 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<UserDto> userByLogin(@RequestBody UserDto user) {
         try {
-            UserEntity userEntity = userService.getByUserLogin(user.getLogin()).orElseThrow(NoSuchElementException::new);
-            UserDto userDto = new UserDto(userEntity.getId(), userEntity.getUsuLogin(), userEntity.getUsuNombre(), userEntity.getUsuMail(),userEntity.getUsuAvatar(), userEntity.getAuthorities());
+            UserEntity userEntity = userService.getByUserLogin(user.getLogin())
+                    .orElseThrow(NoSuchElementException::new);
+            UserDto userDto = new UserDto(userEntity.getId(), userEntity.getUsuLogin(), userEntity.getUsuNombre(),
+                    userEntity.getUsuMail(), userEntity.getUsuAvatar(), userEntity.getAuthorities());
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         } catch (NoSuchElementException exception) {
             HttpHeaders headers = new HttpHeaders();
@@ -45,7 +46,8 @@ public class UserController {
     @GetMapping("/user-detail")
     public ResponseEntity<UserDetailDto> userDetailByLogin(@RequestBody UserDto user) {
         try {
-            UserEntity userEntity = userService.getByUserLogin(user.getLogin()).orElseThrow(NoSuchElementException::new);
+            UserEntity userEntity = userService.getByUserLogin(user.getLogin())
+                    .orElseThrow(NoSuchElementException::new);
             UserDetailDto userDetailDto = new UserDetailDto(
                     userEntity.getId(),
                     userEntity.getUsuLogin(),
@@ -55,8 +57,7 @@ public class UserController {
                     userEntity.getUsuUsuario(),
                     userEntity.getUsuFecha(),
                     userEntity.getUsuMail(),
-                    userEntity.getUsuAvatar()
-            );
+                    userEntity.getUsuAvatar());
             return new ResponseEntity<>(userDetailDto, HttpStatus.OK);
         } catch (NoSuchElementException exception) {
             HttpHeaders headers = new HttpHeaders();
@@ -97,23 +98,23 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> add( @RequestBody UserDetailDto newUser) {
+    public ResponseEntity<?> add(@RequestBody UserDetailDto newUser) {
         UserEntity userEntity;
         HttpHeaders headers = new HttpHeaders();
 
-        if (userService.existByUserLogin(newUser.getLogin())){
+        if (userService.existByUserLogin(newUser.getLogin())) {
             headers.set("CRUD-response-Header",
                     "Value-ese login ya existe");
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.existByUserName(newUser.getName())){
+        if (userService.existByUserName(newUser.getName())) {
             headers.set("CRUD-response-Header",
                     "Value-ese nombre ya existe");
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         }
 
-        if (userService.existByUserMail(newUser.getEmail())){
+        if (userService.existByUserMail(newUser.getEmail())) {
             headers.set("CRUD-response-Header",
                     "Value-ese mail ya existe");
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
@@ -132,7 +133,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> update( @RequestBody UserDetailDto user) {
+    public ResponseEntity<?> update(@RequestBody UserDetailDto user) {
         UserEntity userEntity;
         HttpHeaders headers = new HttpHeaders();
         try {
@@ -183,7 +184,7 @@ public class UserController {
             return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
         }
 
-        if(!userService.deleteUser(userEntity)){
+        if (!userService.deleteUser(userEntity)) {
             headers.set("CRUD-response-Header",
                     "Value-No se ha podido eliminar el usuario");
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
@@ -193,6 +194,5 @@ public class UserController {
                 "Value-Usuario eliminiado");
         return new ResponseEntity<>(headers, HttpStatus.OK);
     }
-
 
 }
